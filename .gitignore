@@ -1,2 +1,5 @@
 /randomNumberGen.js
 /test.js
+.venv/
+__pycache__/
+*.pyc
