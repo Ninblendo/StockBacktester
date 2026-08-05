@@ -18,8 +18,9 @@ close = data["Close"].squeeze()
 # Calculate daily returns
 daily_returns = close.pct_change().fillna(0)
 
+cum_returns = (1 + daily_returns).cumprod()
 # Buy-and-hold benchmark
-buy_and_hold = STARTING_CASH * (1 + daily_returns).cumprod()
+buy_and_hold = STARTING_CASH * cum_returns
 
 # Moving-average strategy
 fast_average = close.rolling(50).mean()
@@ -42,17 +43,18 @@ strategy_returns = (
     - trading_cost
 )
 
-strategy_value = STARTING_CASH * (
-    1 + strategy_returns
-).cumprod()
 
 
-strategy_value = STARTING_CASH * (1 + strategy_returns).cumprod()
+cumMovingAvgReturns = (1 + strategy_returns).cumprod()
+strategy_value = STARTING_CASH * cumMovingAvgReturns
 
 # Display results
 print(f"Buy and hold: ${buy_and_hold.iloc[-1]:,.2f}")
 print(f"Moving-average strategy: ${strategy_value.iloc[-1]:,.2f}")
+print(f"With buy-and-hold strategy, money increased by {cum_returns.iloc[-1]:,.0f}x")
+print(f"With moving-average strategy, money increased by {cumMovingAvgReturns.iloc[-1]:,.0f}x")
 
+ 
 pd.DataFrame(
     {
         "Buy and hold": buy_and_hold,
