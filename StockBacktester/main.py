@@ -1,3 +1,3 @@
 import matplotlib
 
-print("hello world")
+print("hello")
